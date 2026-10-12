@@ -1,24 +1,20 @@
-// '빛과 몸의 움직임' 컨셉: 캐릭터마다 발레 동작 하나를 실루엣으로 표현
-// 스타일 가이드: 실루엣은 항상 순검정(#000~#111), 배경만 캐릭터별 컬러/그라데이션으로 구분
-// c1~c8 사진 실제 자세에 맞춰 동작 이름을 다시 매칭함 (8개로 확정)
 const CHARACTERS = [
-
-{ id: 'arabesque', label: '아라베스크', src: '/img/c2.jpg', bg: 'linear-gradient(160deg, #ff2d2d 0%, #8f0d0d 100%)' },
-
-{ id: 'grandjete', label: '그랑제떼', src: '/img/c7.jpg', bg: 'radial-gradient(circle at 50% 40%, #e2233d 0%, #7a0f1f 80%)' },
-
-{ id: 'développé', label: '데벨로페', src: '/img/c8.jpg', bg: 'linear-gradient(145deg, #3a2f8f 0%, #8a1f5c 100%)' },
-
-{ id: 'dveloppéecarté', label: '디벨로프 에카르테', src: '/img/c6.jpg', bg: 'linear-gradient(135deg, #2ba9d6 0%, #7a1fb0 100%)' },
-
-{ id: 'cambre', label: '캄블레', src: '/img/c1.jpg', bg: 'radial-gradient(circle at 50% 35%, #4a4a78 0%, #14122c 75%)' },
-
-{ id: 'attitude2', label: '에티튜드', src: '/img/c3.jpg', bg: 'linear-gradient(160deg, #c7db4a 0%, #2e3a10 100%)' },
-
-{ id: 'attitude', label: '에티튜드', src: '/img/c5.jpg', bg: '#efece4' },
-
-{ id: 'passe', label: '파세', src: '/img/c4.jpg', bg: 'radial-gradient(circle at 50% 45%, #6b6b6b 0%, #141414 75%)' },
-
+  { id: 'c1', label: 'C1', src: '/img/c1.jpg', bg: '#18162f', aliases: ['cambre'] },
+  { id: 'c2', label: 'C2', src: '/img/c2.jpg', bg: '#b3121d', aliases: ['arabesque'] },
+  { id: 'c3', label: 'C3', src: '/img/c3.jpg', bg: '#8aa900', aliases: ['attitude2'] },
+  { id: 'c4', label: 'C4', src: '/img/c4.jpg', bg: '#242424', aliases: ['passe'] },
+  { id: 'c5', label: 'C5', src: '/img/c5.jpg', bg: '#f2f0eb', aliases: ['attitude'] },
+  { id: 'c6', label: 'C6', src: '/img/c6.jpg', bg: '#7040a5', aliases: ['dveloppéecarté'] },
+  { id: 'c7', label: 'C7', src: '/img/c7.jpg', bg: '#991226', aliases: ['grandjete'] },
+  { id: 'c8', label: 'C8', src: '/img/c8.jpg', bg: '#57309b', aliases: ['développé'] },
+  { id: 'p1', label: 'P1', src: '/img/p1.jpg', bg: '#f3efe8' },
+  { id: 'p2', label: 'P2', src: '/img/p2.jpg', bg: '#efe9dd' },
+  { id: 'p3', label: 'P3', src: '/img/p3.jpg', bg: '#ebe3d5' },
+  { id: 'p4', label: 'P4', src: '/img/p4.jpg', bg: '#e9e2d8' },
+  { id: 'p5', label: 'P5', src: '/img/p5.jpg', bg: '#e7ded1' },
+  { id: 'p6', label: 'P6', src: '/img/p6.jpg', bg: '#e4dacb' },
+  { id: 'p7', label: 'P7', src: '/img/p7.jpg', bg: '#e1d7c9' },
+  { id: 'p8', label: 'P8', src: '/img/p8.jpg', bg: '#e1d7c9' },
 ]
 
 export default CHARACTERS

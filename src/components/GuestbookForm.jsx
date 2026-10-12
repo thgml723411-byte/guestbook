@@ -1,109 +1,61 @@
-import React, {useState} from 'react'
-import CharacterAvatar from './CharacterAvatar'
-import CHARACTERS from './characterData'
+import { useState } from 'react'
+import { GUESTBOOK_CHARACTERS, STAMPS, getStamp, getGuestbookCharacter } from './archiveData'
+import ArchiveCharacter from './ArchiveCharacter'
 import styles from './GuestbookForm.module.scss'
 
-const EMOJIS = ['😀', '😊', '🥰', '😂', '😮', '😢', '😭', '😴', '🤔', '😎', '🥳']
-
-const GuestbookForm = ({onAddpost, defaultNickname = ''}) => {
-  //로그인한 회원이면 계정 닉네임을 기본값으로 채워줌
+export default function GuestbookForm({ onAddpost, defaultNickname = '' }) {
   const [nickname, setNickname] = useState(defaultNickname)
   const [message, setMessage] = useState('')
-  const [character,setCharacter] = useState('')
+  const [character, setCharacter] = useState(GUESTBOOK_CHARACTERS[0].id)
+  const [stamp, setStamp] = useState(STAMPS[0].id)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+  const selectedCharacter = getGuestbookCharacter(character, message).id
 
-  const addE = (emoji) => {
-       setMessage((msg)=>msg + emoji)
-       }
-  const submitFnc = (e) => {
-      e.preventDefault()
-      const newPost = {
-        nickname : nickname,
-        message : message,
-        character : character,
-      }
-      onAddpost(newPost)
-
-      // 값을전달했으면비워주는역활
-      setNickname("")
-      setMessage("")
-      setCharacter("")
+  async function submit(event) {
+    event.preventDefault()
+    if (saving) return
+    if (!nickname.trim() || !message.trim()) {
+      setError('이름과 한마디를 입력해주세요.'); return
+    }
+    setSaving(true); setError(''); setSuccess(false)
+    try {
+      await onAddpost({ nickname: nickname.trim(), message: message.trim(), character: selectedCharacter, stamp })
+      setMessage(''); setSuccess(true)
+    } catch {
+      setError('흔적을 보관하지 못했습니다. 작성한 내용은 남아 있으니 다시 시도해주세요.')
+    } finally { setSaving(false) }
   }
-  return (
-    <div className={styles.formWrap}>
-      <form className={styles.form} onSubmit={submitFnc}>
-        <span className={styles.formClip} aria-hidden='true' />
-        <h2 className={styles.formTitle}>마음에 드는 동작을 고르고 방명록을 남겨주세요</h2>
 
-        <div className={styles.formBody}>
-          {/* 왼쪽: 캐릭터 선택 -> 선택한 캐릭터가 여기 배치됨 */}
-          <div className={styles.charColumn}>
-            <div className={styles.charPreview}>
-              {
-                character ? (
-                  <CharacterAvatar character={character} />
-                ) : (
-                  <span className={styles.charPreviewEmpty}>?</span>
-                )
-              }
-            </div>
-            <div className={styles.charList}>
-            {
-              CHARACTERS.map((item)=>(
-                <button key={item.id} type='button'
-                className={`${styles.charBtn} ${character === item.id ? styles.selected : ''}`}
-                onClick={()=>setCharacter(item.id)}>
-                  <span className={styles.charBtnAvatar}>
-                    <CharacterAvatar character={item.id} />
-                  </span>
-                  <span className={styles.charBtnLabel}>{item.label}</span>
-                </button>
-              ))
-            }
-            </div>
+  return <section className={styles.composer} id='write' aria-labelledby='write-title'>
+    <form onSubmit={submit} className={styles.form}>
+      <p className='archive-label'>NEW ENTRY / 당신의 차례</p>
+      <h2 id='write-title'>어떤 흔적을 남길까요?</h2>
+      <fieldset disabled={saving}>
+        <div className={styles.characterField}>
+          <span id='character-label'>나를 대신할 캐릭터</span>
+          <div className={styles.characters} role='group' aria-labelledby='character-label'>
+            {GUESTBOOK_CHARACTERS.map((item) => <button key={item.id} type='button' className={`${styles.characterOption} ${selectedCharacter === item.id ? styles.characterSelected : ''}`} aria-label={`${item.label} 캐릭터 선택`} aria-pressed={selectedCharacter === item.id} onClick={() => { setCharacter(item.id); setSuccess(false) }}>
+              <span className={styles.characterThumbnail}><ArchiveCharacter character={item.id} decorative /></span>
+              {selectedCharacter === item.id && <span className={styles.characterCheck} aria-hidden='true'>✓</span>}
+            </button>)}
           </div>
-
-          {/* 오른쪽: 닉네임 / 이모티콘 / 메세지 작성 */}
-          <div className={styles.infoColumn}>
-            <label className={styles.field}>
-                닉네임
-                <input type='text' value={nickname} onChange={(e)=>{
-                      setNickname(e.target.value)
-                }} placeholder='사용할 이름' maxLength={20} required/>
-             </label>
-
-             <div className={styles.emojiList}>
-              {
-                 EMOJIS.map((item)=>(
-                     <button key={item} type='button' className={styles.emojiBtn} onClick={()=> addE(item)}>
-                       {item}
-                     </button>
-                 ))
-              }
-             </div>
-
-             <label className={`${styles.field} ${styles.messageField}`}>
-                메세지
-                <textarea type='text' value={message} onChange={(e)=>{
-                      setMessage(e.target.value)
-                }} placeholder='당신의 이야기를 들려주세요' maxLength={500} required/>
-             </label>
-
-             <div className={styles.submitWrap}>
-               <button type='submit' className={styles.submitBtn}>등록하기</button>
-             </div>
-          </div>
+          {message.includes('스누피') && <p className={styles.characterHint}>‘스누피’가 들어간 글에는 스누피 캐릭터가 연결됩니다.</p>}
         </div>
-      </form>
-    </div>
-  )
+        <label className={styles.field}>남길 이름<input value={nickname} onChange={(event) => setNickname(event.target.value)} placeholder='이곳에서 불리고 싶은 이름' maxLength={20} required autoComplete='nickname' /></label>
+        <label className={styles.field}>남길 한마디<textarea value={message} onChange={(event) => { setMessage(event.target.value); setSuccess(false) }} placeholder='짧은 인사도 좋아요. 오늘의 마음을 놓고 가세요.' maxLength={500} required rows={5} /><span className={styles.count}>{message.length} / 500</span></label>
+        <div className={styles.stampField}><span id='stamp-label'>마음을 담은 도장</span><div className={styles.stamps} role='group' aria-labelledby='stamp-label'>{STAMPS.map((item) => <button key={item.id} type='button' className={stamp === item.id ? styles.selected : ''} aria-pressed={stamp === item.id} onClick={() => setStamp(item.id)}>{item.label}</button>)}</div></div>
+        <button type='submit' className='archive-button'>{saving ? '보관하는 중…' : '흔적 보관하기'} <span aria-hidden='true'>↗</span></button>
+      </fieldset>
+      {error && <p role='alert' className='archive-error'>{error}</p>}
+      {success && <p role='status' className={styles.success}>당신의 흔적이 보관되었습니다. 아래 기록에서 만나보세요.</p>}
+    </form>
+    <aside className={styles.preview} aria-label='작성 중인 기록 미리보기'>
+      <div className={styles.previewTop}><span>ARCHIVE NOTE</span><span>미리보기</span></div>
+      <div className={styles.previewCharacter}><ArchiveCharacter character={selectedCharacter} /></div>
+      <p className={styles.previewMessage}>{message || '당신의 한마디가\n이곳에 오래 남습니다.'}</p>
+      <div className={styles.previewBottom}><span>{nickname.trim() || '당신의 이름'}</span><span className='archive-stamp'>{getStamp(stamp).label}</span></div>
+    </aside>
+  </section>
 }
-
-export default GuestbookForm
-
-//단락이아니기때문에색션을안씀
-//onAddpost백으로넘어가면지워질것
-//리액트에서는반복해서만드는선포가map//태그로나가게할꺼라서중괄호말고소괄호로
-//자기성질이면onClick={}들어가고서밋이면들어가지못함
-//&&은캐릭터가있으면작동해달라여태껏삼항연자를썼지만조건이없어서&&사용
-
-//nickname,message,character,실무에서는같으거면이렇게사용

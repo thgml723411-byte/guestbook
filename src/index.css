@@ -1,7 +1,20 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
-}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
+
+:root { font-family: 'Noto Sans KR', sans-serif; color: var(--ink); background: var(--paper); font-synthesis: none; --matcha: #76845b; --oat: #d8d3b3; --espresso: #603314; --cloud: #b1b7be; --ink: var(--espresso); --accent: var(--espresso); --paper: var(--oat); --card: #eeeada; --surface: #c4c9ad; --muted: #625f47; --line: var(--cloud); --shadow: #bfc3aa; --accent-hover: #45240e; --accent-soft: #e0dfc4; --success: #4b5739; --button-bg: var(--espresso); --button-ink: var(--oat); }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: wait; opacity: .55; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea { border-radius: 0; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+::selection { color: var(--oat); background: var(--accent); }
+.archive-label { font: 11px/1.6 'Courier New', monospace; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+.archive-button { display: inline-flex; align-items: center; justify-content: center; gap: 28px; padding: 16px 24px; border: 1px solid var(--button-bg); color: var(--button-ink); background: var(--button-bg); font-size: 13px; font-weight: 600; transition: background .2s; }
+.archive-button:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.archive-link { display: inline-flex; gap: 24px; align-items: center; padding-bottom: 8px; border-bottom: 1px solid currentColor; font-size: 13px; }
+.archive-stamp { display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; border: 2px solid currentColor; outline: 1px solid currentColor; outline-offset: -6px; border-radius: 50%; color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: -.05em; transform: rotate(-12deg); }
+.archive-error { color: var(--accent); font-size: 13px; line-height: 1.8; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }

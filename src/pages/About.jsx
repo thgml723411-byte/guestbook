@@ -1,49 +1,12 @@
-import React from 'react'
-import CHARACTERS from '../components/characterData'
+import { Link } from 'react-router-dom'
 import styles from './About.module.scss'
 
-const About = () => {
-  return (
-    <div className={styles.page}>
-      {/* 히어로: 어둠 속에서 떠도는 빛으로 컨셉을 먼저 보여줌 */}
-      <section className={styles.hero}>
-        <div className={styles.glow} aria-hidden='true'>
-          <span className={styles.orb} />
-          <span className={styles.orb} />
-          <span className={styles.orb} />
-        </div>
-        <span className={styles.eyebrow}>CONCEPT</span>
-        <h1 className={styles.title}>빛과 몸의 움직임</h1>
-        <p className={styles.lead}>
-          어둠 속을 떠도는 빛처럼, 멈춰있지 않고 흘러가는 순간을 담습니다.<br />
-          방명록에 남기는 캐릭터 하나하나는 정지한 그림이 아니라, 빛이 스친 한 동작입니다.
-        </p>
-      </section>
-
-      {/* 동작 갤러리: 캐릭터별 발레 동작을 실루엣 + 빛(그라데이션)으로 표현 */}
-      <section className={styles.gallery}>
-        <div className={styles.galleryHead}>
-          <span className={styles.eyebrow}>MOVEMENT</span>
-          <h2>여덟 개의 동작, 여덟 개의 빛</h2>
-          <p>같은 어둠 위에서 저마다 다른 빛깔로 움직입니다</p>
-        </div>
-        <div className={styles.grid}>
-          {CHARACTERS.map((item) => (
-            <div key={item.id} className={styles.card} style={{ background: item.bg }}>
-              <span className={styles.sweep} aria-hidden='true' />
-              <img
-                src={item.src}
-                alt={item.label}
-                className={styles.silhouette}
-                onError={(e) => { e.target.style.display = 'none' }}
-              />
-              <span className={styles.label}>{item.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
-  )
+export default function About() {
+  return <section className={styles.page}>
+    <p className='archive-label'>ABOUT / THE TRACE ARCHIVE</p>
+    <div className={styles.intro}><h1>스쳐 지나간 순간에도<br />남겨둘 마음은 있으니까<span>.</span></h1><span className='archive-stamp'>보관중</span></div>
+    <div className={styles.story}><span className='archive-label'>OUR LITTLE ARCHIVE</span><div><h2>당신의 방문이 하나의 기록이 되는 곳.</h2><p>흔적 보관소는 이곳을 다녀간 사람들이 남긴 한마디를 모읍니다.<br />잘 쓴 글이나 특별한 이야기가 아니어도 괜찮아요.</p><p>짧은 인사, 오늘의 기분, 전하고 싶은 응원.<br />나를 대신할 캐릭터를 고르고 이름과 한마디를 남겨주세요. 작은 도장과 함께 당신만의 기록으로 보관됩니다.</p></div></div>
+    <div className={styles.chapters}>{[['01 / WRITE', '한마디를 쓰고', '흘러가는 생각을 잠시 붙잡아요.'], ['02 / LEAVE', '마음을 남기고', '지나온 자리에 작은 인사를 놓아요.'], ['03 / KEEP', '오래 보관합니다', '다른 이의 마음도 천천히 읽어보세요.']].map(([label, title, copy]) => <div key={label}><span className='archive-label'>{label}</span><h3>{title}</h3><p>{copy}</p></div>)}</div>
+    <div className={styles.invitation}><p>이제, 당신의 흔적을 만나고 싶어요.</p><Link to='/guestbook#write' className='archive-button'>내 흔적 남기기 <span aria-hidden='true'>↗</span></Link></div>
+  </section>
 }
-
-export default About
